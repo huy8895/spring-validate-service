@@ -2,8 +2,10 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY target/*.jar app.jar
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN chmod +x mvnw && ./mvnw dependency:resolve
 
-EXPOSE 8080
+COPY src ./src
 
-CMD ["java", "-jar", "-Dserver.port=8080", "app.jar"]
+CMD ["./mvnw", "spring-boot:run"]
